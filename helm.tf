@@ -8,7 +8,7 @@
 #}
 
 # 됨
-/*
+
 resource "helm_release" "nginx_ingress" {
  name       = "bitnaminginx2"
  repository = "https://charts.bitnami.com/bitnami"
