@@ -18,7 +18,7 @@ resource "helm_release" "nginx_ingress" {
  timeout = 900
 }
 
-
+/*
 resource "helm_release" "grafana-bitnami" {
   name       = "grafana2"
   #namespace = "grafana-bitnami"

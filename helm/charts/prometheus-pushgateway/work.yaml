@@ -1,0 +1,31 @@
+
+extraArgs:
+  - --persistence.file=/data/pushgateway.data
+  - --persistence.interval=5m
+
+
+resources:
+  limits:
+    cpu: 150m
+    memory: 50Mi
+  requests:
+    cpu: 90m
+    memory: 30Mi
+
+
+nodeSelector: {}
+
+replicaCount: 2
+
+serviceMonitor:
+  enabled: true
+  namespace: push3
+
+
+persistentVolume:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  existingClaim: ""
+  mountPath: /data
+  size: 2Gi

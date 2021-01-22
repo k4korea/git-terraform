@@ -1,0 +1,95 @@
+resource "helm_release" "prometheus-pushgateway" {
+
+  name      = "pushgateway"
+  namespace = "push3"
+  chart     = "prometheus-pushgateway"
+  version    = "1.5.1"
+
+
+  #repository = "https://prometheus-community.github.io/helm-charts"
+  repository = "./helm/charts"
+  wait = false    
+  recreate_pods = true
+
+  values = [
+    "${file("helm/charts/prometheus-pushgateway/values.yaml")}"
+  ]
+
+
+#  values = [
+#    "${file("./service-monitor.yaml")}"
+#    ]
+
+# 성능 제한
+/*
+  set {
+    name  = "resources.limits.cpu"
+    value = "200m"
+  }
+
+  set {
+    name  = "resources.limits.memory"
+    value = "60MI"
+  }
+
+  set {
+    name  = "resources.requests.cpu"
+    value = "100m"
+  }
+ 
+  set {
+    name  = "resources.requests.memory"
+    value = "30Mi"
+  }  
+*/  
+/*  
+# pv 저장공간 지정
+  set {
+    name = "persistentVolume.enabled"
+    value = "true"
+  }
+
+# pv 생성 옵션 (필수)
+  set {
+    name = "persistentVolume.size"
+    value = "2Gi"
+  }
+
+# 서비스 모니터 활성화 (필수 입력)
+  set {
+    name  = "serviceMonitor.enabled"
+    value = "true"
+  }
+
+# 서비스 모니터가 배포될 네임스페이스 (필수 입력)
+  set {
+    name  = "serviceMonitor.namespace"
+    value = "push3"
+  }
+
+# 서비스 모니터의 interval
+  set {
+    name  = "serviceMonitor.interval"
+    value = "15s"
+  }
+
+# 서비스 모니터의 scrapeTimeout
+  set {
+    name  = "serviceMonitor.scrapeTimeout"
+    value = "10s"
+  }
+
+# 서비스 모니터의 타켓 포트 (필수 입력)
+  set {
+    name  = "serviceMonitor.targetPort"
+    value = "9091"
+  }
+
+# release label 수정 (필수 입력)
+  set {
+    name  = "serviceMonitor.release"
+    value = "prometheus-operator"
+  }
+*/  
+
+}

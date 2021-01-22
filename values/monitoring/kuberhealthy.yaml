@@ -1,0 +1,23 @@
+prometheus:
+  enabled: true
+  name: "prometheus"
+  release: prometheus-operator
+  enableScraping: true
+  serviceMonitor: true
+  enableAlerting: true
+
+resources:
+  requests:
+    cpu: 400m
+    memory: 300Mi
+  limits:
+    cpu: 400m
+    memory: 500Mi
+
+check:
+  daemonset:
+    enabled: false
+  deployment:
+    enabled: false
+  dnsInternal:
+    enabled: false
