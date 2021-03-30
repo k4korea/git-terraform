@@ -1,4 +1,7 @@
 
+
+
+
 # prometheusOperator:
 #   affinity:
 #     nodeAffinity:
@@ -18,9 +21,28 @@
   #     memory: 300Mi
 kube-state-metrics:
   replicas: 1
+
 prometheus:
+
+  
   prometheusSpec:
+    thanos:
+      baseImage: quay.io/thanos/thanos
+      version: v0.18.0
+    
+     
+
     enableAdminAPI: true
+
+    # stable/prometheus
+     # objectStorageConfig:
+      #   key: objstore.yml
+      #   name: my-thanos-objstore-secret
+
+    #bitnami
+    objectStorageConfig:
+      secretName: my-thanos-objstore-secret 
+      secretKey: objstore.yml
     replicas: 1
     # podAntiAffinity: "hard"
     # affinity:
@@ -32,7 +54,6 @@ prometheus:
     #             operator: In
     #             values:
     #             - ops
-  
    
     query:
       maxSamples: 800000000
@@ -46,6 +67,16 @@ prometheus:
             requests:
               storage: 1Gi
           
+  thanosService:
+    enabled: true
+    annotations: {}
+    labels: {}
+    portName: grpc
+    port: 10901
+    targetPort: "grpc"
+  
+
+
 
     # additionalScrapeConfigs:
     # # scrape config for service endpoints.
@@ -107,3 +138,5 @@ prometheus:
     #   - source_labels: [__meta_kubernetes_pod_name]
     #     action: replace
     #     target_label: pod_name
+
+    

@@ -1,0 +1,12 @@
+
+image_version: "v1.3.0"
+
+#filemeta_clusterip:
+#  endpoint: "http://filemeta.filemeta.svc.cluster.local:10080"
+#filemeta_service:
+#  endpoint: "http://filemeta.filemeta.svc.cluster.local:10080"
+
+filemeta_clusterip:
+  endpoint: "http://bit-nginx.default.svc.cluster.local:8080"
+filemeta_service:
+  endpoint: "http://bit-nginx.default.svc.cluster.local:8080"

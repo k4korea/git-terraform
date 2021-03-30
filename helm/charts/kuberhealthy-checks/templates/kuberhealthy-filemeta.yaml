@@ -1,0 +1,83 @@
+
+
+apiVersion: comcast.github.io/v1
+kind: KuberhealthyCheck
+metadata:
+  name: filemeta-loadbalancer
+  namespace: kuberhealthy
+spec:
+  runInterval: 50s  # The interval that Kuberhealthy will run your check on.
+  timeout: 60s  # After this much time, Kuberhealthy will kill your httpcheck and consider it "failed".
+  podSpec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: node.kubernetes.io/role
+                  operator: In
+                  values:
+                    - ops
+    containers:
+      - name: http
+        image: kuberhealthy/http-check:{{ .Values.image_version }}
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: CHECK_URL
+            value: "{{ .Values.filemeta_service.endpoint }}/fm/index.html"
+          - name: COUNT
+            value: "3"
+          - name: SECONDS
+            value: "10"
+          - name: PASSING_PERCENT
+            value: "100"
+        resources:
+          requests:
+            cpu: 15m
+            memory: 15Mi
+          limits:
+            cpu: 25m
+        restartPolicy: Always
+    terminationGracePeriodSeconds: 5
+---
+
+apiVersion: comcast.github.io/v1
+kind: KuberhealthyCheck
+metadata:
+  name: filemeta-clusterip
+  namespace: kuberhealthy
+spec:
+  runInterval: 50s  # The interval that Kuberhealthy will run your check on.
+  timeout: 60s  # After this much time, Kuberhealthy will kill your httpcheck and consider it "failed".
+  podSpec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: node.kubernetes.io/role
+                  operator: In
+                  values:
+                    - ops
+    containers:
+      - name: http
+        image: kuberhealthy/http-check:{{ .Values.image_version }}
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: CHECK_URL
+            value: "{{ .Values.filemeta_clusterip.endpoint }}/fm/index.html"
+          - name: COUNT
+            value: "3"
+          - name: SECONDS
+            value: "10"
+          - name: PASSING_PERCENT
+            value: "100"
+        resources:
+          requests:
+            cpu: 15m
+            memory: 15Mi
+          limits:
+            cpu: 25m
+        restartPolicy: Always
+    terminationGracePeriodSeconds: 5
+---

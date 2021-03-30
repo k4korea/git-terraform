@@ -19,9 +19,8 @@ module "prometheus_endpoint" {
 }
 */
 
-
-
 /*
+
 resource "kubernetes_namespace" "prometheus_ns" {
   metadata {
     annotations = {
@@ -32,9 +31,10 @@ resource "kubernetes_namespace" "prometheus_ns" {
     }
     name = "prometheus"
   }
-}
 */
 
+
+/*
 resource "helm_release" "prometheus" {
   #depends_on = [kubernetes_namespace.prometheus_ns]
   namespace = "prometheus"
@@ -70,7 +70,7 @@ resource "helm_release" "prometheus" {
   # set {
   #   name    = "prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName"
   #   value   = "csi-hostpath-sc"
-  # }
+  # }gudrlagggggfgrla
 
   set {
     name    = "prometheus.prometheusSpec.replicas"
@@ -101,14 +101,16 @@ resource "helm_release" "prometheus" {
     name    = "prometheusOperator.enabled"
     value   = true
   }
-  set {
-    name    = "prometheusOperator.admissionWebhooks.enabled"
-    value   = false
-  }
-  set {
-    name    = "prometheusOperator.tlsProxy.enabled"
-    value   = false
-  }
+  
+  # set {
+  #   name    = "prometheusOperator.admissionWebhooks.enabled"
+  #   value   = false
+  # }
+  # set {
+  #   name    = "prometheusOperator.tlsProxy.enabled"
+  #   value   = false
+  # }
+  
   set {
     name    = "grafana.enabled"
     value   = false
@@ -116,7 +118,9 @@ resource "helm_release" "prometheus" {
 
 }
 
+*/
 
+/*
 resource "kubernetes_service" "kubernetes-prometheus" {
   metadata {
     name = "prometheus"
@@ -141,7 +145,7 @@ resource "kubernetes_service" "kubernetes-prometheus" {
       target_port = 9090
       protocol = "TCP"
     }
-#    load_balancer_source_ranges = var.prometheus_restrict_cidr
     type = "NodePort"
   }
 }
+*/

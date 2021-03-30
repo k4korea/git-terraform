@@ -8,9 +8,9 @@
 #}
 
 # 됨
-/*
-resource "helm_release" "nginx-ingress3" {
- name       = "bitnaminginx3"
+
+resource "helm_release" "nginx" {
+ name       = "bit-nginx"
  repository = "https://charts.bitnami.com/bitnami"
  chart      = "nginx"
  version    = "8.3.0"
@@ -18,7 +18,29 @@ resource "helm_release" "nginx-ingress3" {
  timeout = 900
 
 }
+
+/*
+resource "kubernetes_service" "kubernetes-prometheus" {
+  metadata {
+    name = "nginx-service"
+    namespace = "work"
+    
+    
+  }
+  spec {
+    selector = {
+      "app" = "nginx"
+    }
+    port {
+      port        = 80
+      target_port = 80
+      protocol = "TCP"
+    }
+    type = "NodePort"
+  }
+}
 */
+
 
 /*
 resource "helm_release" "grafana-bitnami" {
@@ -32,36 +54,6 @@ resource "helm_release" "grafana-bitnami" {
 }
 */
 
-/*
-resource "helm_release" "prometheus" {
-  #depends_on = [kubernetes_namespace.prometheus_ns]
-  name      = "stack"
-  namespace = "prometheus"
-  recreate_pods = true
-
-  
-  #chart     = "prometheus-operator"
-  #repository = "https://charts.helm.sh/stable"
-
-  chart       = "kube-prometheus-stack"
-  repository  = "https://prometheus-community.github.io/helm-charts"
-  version     = "13.12.0"
-
-
-#  repository = "https://kubernetes-charts.storage.googleapis.com"
-  wait = false
-  timeout = 9000
-
-  values = [
-   # "${file("helm/values/default-affinity-node.yaml")}",
-   # "${file("helm/values/prometheus-operator-values.yaml")}"
-   # "${file("./values/prometheus-operator-values.yaml")}"
-   
-                      
-  ]
-
-}
-*/
 
 resource "helm_release" "metric-server" {
   #repository = "https://prometheus-community.github.io/helm-charts"

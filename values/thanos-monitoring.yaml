@@ -1,0 +1,126 @@
+
+
+global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+  storageClass: csi-hostpath-sc
+
+## Objstore Configuration
+## Specify content for objstore.yml
+##
+
+
+
+# --> 이거는 실제 value 확인안됨.
+objstoreConfig: |-
+  type: s3
+  config:
+    bucket: thanos
+    endpoint: thanos.minio.monitoring.svc.cluster.local:9000
+    access_key: minio
+    secret_key: minio123
+    insecure: false
+#existingObjstoreSecret: my-thanos-objstore-secret
+
+#    endpoint: {{ include "thanos.minio.fullname" . }}.monitoring.svc.cluster.local:9000
+
+#query:
+query:
+  enabled: true
+  dnsDiscovery:
+    sidecarsService: kube-prometheus-prometheus-thanos
+    sidecarsNamespace: monitoring
+
+#bucketweb:
+bucketweb:
+  ## Set to true to enable Thanos Bucket Web component
+  ##
+  enabled: false
+
+# #compactor
+compactor:
+  ## Set to true to enable Thanos Compactor component
+  ##
+  enabled: true
+  persistence:
+    enabled: true
+    storageClass: "csi-hostpath-sc"
+
+# #storegateway:
+storegateway:
+  ## Set to true to enable Thanos Store Gateway component
+  ##
+  enabled: true
+  persistence:
+    enabled: true
+    storageClass: "csi-hostpath-sc"
+
+
+ruler:
+  enabled: true
+  alertmanagers:
+    - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
+  config: |-
+    groups:
+      - name: "metamonitoring"
+        rules:
+          - alert: "PrometheusDown"
+            expr: absent(up{prometheus="monitoring/kube-prometheus"})
+
+#queryFrontend:
+queryFrontend:
+  ## Set to true to enable Thanos Query Frontend component
+  ##
+  enabled: false
+
+
+# receive:
+#   ## Set to true to enable Thanos Receive component
+#   ##
+#   enabled: true
+
+
+#--------------------------- 한개라도 건들명 에러 ------
+
+
+#Prometheus metrics
+metrics:
+  enabled: true
+
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: true
+    ## Namespace in which Prometheus is running
+    ##
+    namespace: prometheus
+    ## Labels to add to the ServiceMonitor object
+    ##
+    # labels:
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+
+
+minio:
+  ## Set to true to deploy a MinIO(R) chart
+  ## to be used as an objstore for Thanos
+  ##
+  enabled: true
+
+  ## MinIO(R) credentials
+  ##
+  accessKey:
+    password: 'minio'
+  secretKey:
+    password: 'minio123'
+
+  ## Default MinIO(R) buckets
+  ##
+  defaultBuckets: 'thanos2'
